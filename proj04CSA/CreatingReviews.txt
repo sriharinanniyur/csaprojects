@@ -1,0 +1,5 @@
+Create a regular .txt file in Sublime. 
+
+Type your sample review as you normally would and save it with the extension .txt.
+
+Be sure to save your review files *inside* of the proj04CSA folder.
