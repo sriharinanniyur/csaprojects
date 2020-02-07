@@ -178,14 +178,27 @@ public class Review {
     }
   }
 
-  // HERE ON IS THE GLORIOUS WORK OF SRIHARI AND MARGE
+  // OUR WORK STARTS HERE
   public static double totalSentimentVal(String fileName) {
       double total = 0.0000000000;
-      Scanner scanner = new Scanner(new File(fileName));
-      while (scanner.hasNextLine()) {
-          String[] words = scanner.nextLine().split(" ");
-          for (String word : words) total += sentimentVal(word);
+      try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            String[] words = line.split(" ");
+            for (String word : words) total += sentimentVal(word);
+        }
+      } catch (IOException e) {
+        System.out.println("File not found.");
+        System.exit(1);
       }
       return total;
+  }
+  public static int starRating(String fileName) {
+	double sentiment = totalSentimentVal(fileName);
+	if (sentiment < 0) return 1;
+	else if (sentiment < 5) return 2;
+	else if (sentiment < 10) return 3;
+	else if (sentiment < 15) return 4;
+	else return 5;
   }
 }
