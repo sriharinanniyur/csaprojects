@@ -52,7 +52,7 @@ public class Review {
       Scanner input = new Scanner(new File("positiveAdjectives.txt"));
       while(input.hasNextLine()){
         String temp = input.nextLine().trim();
-        System.out.println(temp);
+        //System.out.println(temp);
         posAdjectives.add(temp);
       }
       input.close();
@@ -152,6 +152,7 @@ public class Review {
   public static String randomPositiveAdj()
   {
     int index = (int)(Math.random() * posAdjectives.size());
+
     return posAdjectives.get(index);
   }
   
@@ -179,13 +180,16 @@ public class Review {
   }
 
   // OUR WORK STARTS HERE
-  public static double totalSentimentVal(String fileName) {
+  public static double totalSentiment(String fileName) {
       double total = 0.0000000000;
       try (BufferedReader br = new BufferedReader(new FileReader(fileName))) {
         String line;
         while ((line = br.readLine()) != null) {
+
             String[] words = line.split(" ");
-            for (String word : words) total += sentimentVal(word);
+            for (String word : words){ 
+              total += sentimentVal(word);
+            }
         }
       } catch (IOException e) {
         System.out.println("File not found.");
@@ -193,12 +197,34 @@ public class Review {
       }
       return total;
   }
+
   public static int starRating(String fileName) {
-	double sentiment = totalSentimentVal(fileName);
-	if (sentiment < 0) return 1;
-	else if (sentiment < 5) return 2;
-	else if (sentiment < 10) return 3;
-	else if (sentiment < 15) return 4;
-	else return 5;
+  	double sentiment = totalSentiment(fileName);
+  	if (sentiment < 0) return 1;
+  	else if (sentiment < 5) return 2;
+  	else if (sentiment < 10) return 3;
+  	else if (sentiment < 15) return 4;
+  	else return 5;
   }
+
+   public static String fakeReview(String fileName){
+    String originalFile = textToString(fileName);
+    String fakeReview = "";
+
+    String words[] = originalFile.split(" ");
+
+    for (int i = 0; i < words.length; i++){
+      
+      if(words[i].charAt(0) == '*'){
+        fakeReview += randomAdjective() + getPunctuation(words[i]) + " ";
+      }
+      else {
+        fakeReview += words[i] + " ";
+      }
+    }
+
+    return fakeReview;
+  } 
+
+
 }
