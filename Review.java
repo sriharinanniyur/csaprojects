@@ -187,8 +187,9 @@ public class Review {
         while ((line = br.readLine()) != null) {
 
             String[] words = line.split(" ");
-            for (String word : words){ 
-              total += sentimentVal(word);
+            for (String word : words){
+              if (word.length() > 0 && word.charAt(0) == '*') total += sentimentVal(word.substring(1)); 
+              else total += sentimentVal(word);
             }
         }
       } catch (IOException e) {
@@ -196,6 +197,13 @@ public class Review {
         System.exit(1);
       }
       return total;
+  }
+  public static double sentenceSentiment(String sentence) {
+    String[] words = sentence.split(" ");
+    int total = 0;
+    for (String word : words) total += sentimentVal(word);
+    System.out.println(total);
+    return total;
   }
 
   public static int starRating(String fileName) {
@@ -222,9 +230,22 @@ public class Review {
         fakeReview += words[i] + " ";
       }
     }
-
     return fakeReview;
   } 
+  
+  public static String fakeReview_v2(String fileName) {
+    String originalFile = textToString(fileName);
+    String fakeReview = "";
+    String words[] = originalFile.split(" ");
 
-
+    for (int i = 0; i < words.length; i++){
+      if(words[i].charAt(0) == '*'){
+        fakeReview += (totalSentiment(fileName) > 0 ? randomPositiveAdj() : randomNegativeAdj()) + getPunctuation(words[i]) + " ";
+      }
+      else {
+        fakeReview += words[i] + " ";
+      }
+    }
+    return fakeReview;
+  }
 }
