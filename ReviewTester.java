@@ -8,5 +8,7 @@ public class ReviewTester {
     System.out.println(Review.fakeReview("ChezPerryReviewAnnotated.txt"));
     System.out.println("Testing Fake Review v2");
     System.out.println(Review.fakeReview_v2("ChezPerryReviewAnnotated.txt"));
+
+    Review.sentimentsArray("fakeRev2.txt");
   }
 }

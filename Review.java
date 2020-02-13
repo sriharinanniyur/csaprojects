@@ -237,10 +237,39 @@ public class Review {
     String originalFile = textToString(fileName);
     String fakeReview = "";
     String words[] = originalFile.split(" ");
+    String curr = "";
 
     for (int i = 0; i < words.length; i++){
-      if(words[i].charAt(0) == '*'){
-        fakeReview += (totalSentiment(fileName) > 0 ? randomPositiveAdj() : randomNegativeAdj()) + getPunctuation(words[i]) + " ";
+
+      if(getPunctuation(words[i]) != "")
+        curr = removePunctuation(words[i]);
+      else
+        curr = words[i];
+
+
+      if(curr.charAt(0) == '*'){
+
+        if(totalSentiment(fileName) > 0){
+          if(sentimentVal(curr.substring(1)) < 0){
+
+            fakeReview += randomPositiveAdj() + getPunctuation(words[i]) + " ";
+          }
+          else {
+            fakeReview += curr.substring(1) + getPunctuation(words[i]) + " ";
+          }
+
+        }
+        else {
+
+          if(sentimentVal(curr.substring(1)) > 0){
+
+            fakeReview += randomNegativeAdj() + getPunctuation(words[i]) + " ";
+          }
+          else {
+            fakeReview += curr.substring(1) + getPunctuation(words[i]) + " ";
+          }
+
+        }
       }
       else {
         fakeReview += words[i] + " ";
@@ -248,4 +277,38 @@ public class Review {
     }
     return fakeReview;
   }
+
+
+  public static double[] sentimentsArray(String fileName){
+    String text = textToString(fileName);
+    int numSentence = 0;
+    String tempSentence = "";
+    
+    for(int i = 0; i < text.length(); i++){
+      if(text.charAt(i) == '.' || text.charAt(i) == '!'|| text.charAt(i) == '?' ){
+        numSentence++;
+      }
+    }
+
+    double[] sentenceSentimets = new double[numSentence];
+
+    int j = 0;
+
+    for(int i = 0; i < numSentence; i++){
+
+      while(!(text.charAt(j + i) == '.' || text.charAt(j + i) == '!'|| text.charAt(j + i) == '?')){
+        tempSentence += text.charAt(j + i);
+        j++;
+      }
+
+      System.out.println("TEMP SENTENCE: " + tempSentence);
+      System.out.println();
+      sentenceSentimets[i] = sentimentVal(tempSentence) + text.charAt(j + i);
+      tempSentence = "";
+
+    }
+
+    return sentenceSentimets;
+
+  } 
 }
