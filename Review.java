@@ -283,32 +283,65 @@ public class Review {
     String text = textToString(fileName);
     int numSentence = 0;
     String tempSentence = "";
+
+   //split sentences into array
+    String[] sentences = text.split("“//.|//!|//?”"); //this is supposed to work
+    numSentence = sentences.length;
+
+    double[] sentenceSentiments = new double[numSentence];
+
+     //populate array
+    for(int i = 0; i < sentences.length; i++){
+        sentenceSentiments[i] = sentimentVal(sentences[i]);
+    } 
+
+
+    return sentenceSentiments;
+
+   
+} 
+
+public static String sentenceSV(String fileName){
+
+    String text = textToString(fileName);
+    int numSentence = 0;
+    String tempSentence = "";
+
+   //split text into sentence array
+    String[] sentences = text.split("“//.|//!|//?”"); //this is supposed to work
+    numSentence = sentences.length;
     
-    for(int i = 0; i < text.length(); i++){
-      if(text.charAt(i) == '.' || text.charAt(i) == '!'|| text.charAt(i) == '?' ){
-        numSentence++;
+    double[] sentenceVal = sentimentsArray(fileName);
+
+   int sentenceIndex = 0;
+
+   //find most extreme index
+   if(totalSentiment(fileName) > 0)
+      sentenceIndex = findMaxIndex(sentenceVal);
+   else
+      sentenceIndex = findMinIndex(sentenceVal);
+
+   return sentences[sentenceIndex];
+
+
+}
+
+   public static int findMaxIndex(double[] arr){
+      int max = 0;
+      for(int i = 0; i < arr.length; i++){
+         if(arr[i] > arr[max])
+            max = i;
       }
-    }
+      return max;
+   }
 
-    double[] sentenceSentimets = new double[numSentence];
-
-    int j = 0;
-
-    for(int i = 0; i < numSentence; i++){
-
-      while(!(text.charAt(j + i) == '.' || text.charAt(j + i) == '!'|| text.charAt(j + i) == '?')){
-        tempSentence += text.charAt(j + i);
-        j++;
+   public static int findMinIndex(double[] arr){
+      int min = 0;
+      for(int i = 0; i < arr.length; i++){
+         if(arr[i] < arr[min])
+            min = i;
       }
+      return min;
+   }
 
-      System.out.println("TEMP SENTENCE: " + tempSentence);
-      System.out.println();
-      sentenceSentimets[i] = sentimentVal(tempSentence) + text.charAt(j + i);
-      tempSentence = "";
-
-    }
-
-    return sentenceSentimets;
-
-  } 
 }
